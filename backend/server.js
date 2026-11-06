@@ -16,9 +16,8 @@ app.use(helmet());
 // }));
 
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://jobapplicationtracker-pink.vercel.app",
-  "https://jobapplicationtracker-git-main-dineshkumar2.vercel.app",
+    "http://localhost:5173",
+  "https://job-application-tracker-phi-inky.vercel.app",
   ...(process.env.CLIENT_URL || "")
     .split(",")
     .map(url => url.trim().replace(/\/$/, ""))
