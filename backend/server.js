@@ -11,9 +11,37 @@ const authRoutes = require("./routes/authRoutes");
 const app = express();
 
 app.use(helmet());
+// app.use(cors({
+//   origin: process.env.CLIENT_URL || "http://localhost:5173"
+// }));
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://jobapplicationtracker-pink.vercel.app",
+  "https://jobapplicationtracker-git-main-dineshkumar2.vercel.app",
+  ...(process.env.CLIENT_URL || "")
+    .split(",")
+    .map(url => url.trim().replace(/\/$/, ""))
+    .filter(Boolean)
+];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173"
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.log("Blocked by CORS:", origin);
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  optionsSuccessStatus: 204
 }));
+
+
+
+
 app.use(express.json({ limit: "20kb" }));
 app.use(express.urlencoded({ extended: true }));
 
